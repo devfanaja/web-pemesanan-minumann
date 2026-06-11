@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brewly — Web Pemesanan Minuman</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-brand">
+    <div class="nav-logo">☕</div>
+    <div class="nav-name">Brew<span>ly</span></div>
+  </div>
+  <div class="nav-actions">
+    <div class="nav-search">
+      <span class="icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Cari minuman..." oninput="filterSearch(this.value)" />
+    </div>
+    <button class="btn-cart" onclick="scrollToCart()">
+      🛒 Keranjang
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow">☕ Minuman Favorit Kamu</div>
+    <h1 class="hero-title">Setiap Tegukan<br>Punya <em>Ceritanya</em></h1>
+    <p class="hero-desc">Dari kopi single origin hingga teh herbal segar — kami sediakan minuman terbaik, dipesan dalam hitungan detik.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="document.querySelector('.menu-section').scrollIntoView({behavior:'smooth'})">
+        🍹 Lihat Menu
+      </button>
+      <button class="btn-outline" onclick="openPromo()">🎁 Promo Hari Ini</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><strong>50+</strong>Menu pilihan</div>
+      <div class="stat"><strong>4.9★</strong>Rating pelanggan</div>
+      <div class="stat"><strong>15 mnt</strong>Estimasi siap</div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="drink-bubble">
+      <div class="emoji">☕</div>
+      <div class="name">Espresso</div>
+      <div class="price">Rp 22.000</div>
+    </div>
+    <div class="drink-bubble">
+      <div class="emoji">🧋</div>
+      <div class="name">Boba Milk Tea</div>
+      <div class="price">Rp 32.000</div>
+    </div>
+    <div class="drink-bubble">
+      <div class="emoji">🍵</div>
+      <div class="name">Matcha Latte</div>
+      <div class="price">Rp 35.000</div>
+    </div>
+  </div>
+</section>
+
+<div class="main-layout">
+
+  <section class="menu-section">
+    <div class="section-header">
+      <h2 class="section-title">Menu <span>Minuman</span></h2>
+    </div>
+
+    <div class="category-tabs">
+      <button class="tab-btn active" onclick="filterCategory('semua', this)">☕ Semua</button>
+      <button class="tab-btn" onclick="filterCategory('kopi', this)">☕ Kopi</button>
+      <button class="tab-btn" onclick="filterCategory('teh', this)">🍵 Teh</button>
+      <button class="tab-btn" onclick="filterCategory('boba', this)">🧋 Boba</button>
+      <button class="tab-btn" onclick="filterCategory('jus', this)">🥤 Jus & Segar</button>
+      <button class="tab-btn" onclick="filterCategory('coklat', this)">🍫 Coklat</button>
+      <button class="tab-btn" onclick="filterCategory('milkshake', this)">🥛 Milkshake</button>
+    </div>
+
+    <div class="menu-grid" id="menuGrid">
+
+      <div class="product-card" data-category="kopi" data-name="espresso">
+        <div class="card-img">☕<span class="card-badge hot">🔥 Terlaris</span><button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Espresso</div>
+          <div class="card-desc">Shot kopi murni berkarakter kuat, crema tebal, dan rasa yang membekas.</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.9 (312)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 22.000</div>
+            <button class="btn-add" onclick="openModal({name:'Espresso',price:22000,emoji:'☕',desc:'Shot kopi murni berkarakter kuat, crema tebal, dan rasa yang membekas.',category:'kopi'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="kopi" data-name="cappuccino">
+        <div class="card-img">☕<span class="card-badge">Favorit</span><button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Cappuccino</div>
+          <div class="card-desc">Perpaduan espresso, susu panas, dan busa susu yang lembut sempurna.</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.8 (240)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 28.000</div>
+            <button class="btn-add" onclick="openModal({name:'Cappuccino',price:28000,emoji:'☕',desc:'Perpaduan espresso, susu panas, dan busa susu yang lembut sempurna.',category:'kopi'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="kopi" data-name="caramel latte">
+        <div class="card-img">🍮<button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Caramel Latte</div>
+          <div class="card-desc">Espresso lembut dengan susu steamed dan siraman karamel manis.</div>
+          <div class="card-rating"><span class="stars">★★★★☆</span> 4.7 (189)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 32.000</div>
+            <button class="btn-add" onclick="openModal({name:'Caramel Latte',price:32000,emoji:'🍮',desc:'Espresso lembut dengan susu steamed dan siraman karamel manis.',category:'kopi'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="kopi" data-name="cold brew">
+        <div class="card-img">🧊<span class="card-badge new">Baru</span><button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Cold Brew</div>
+          <div class="card-desc">Kopi diseduh dingin 12 jam, rasa halus, kafenya kuat tanpa pahit.</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.9 (98)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 35.000</div>
+            <button class="btn-add" onclick="openModal({name:'Cold Brew',price:35000,emoji:'🧊',desc:'Kopi diseduh dingin 12 jam, rasa halus, kafenya kuat tanpa pahit.',category:'kopi'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="teh" data-name="matcha latte">
+        <div class="card-img">🍵<span class="card-badge hot">🔥 Terlaris</span><button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Matcha Latte</div>
+          <div class="card-desc">Teh hijau Jepang ceremonial grade, creamy, dan sedikit manis.</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.9 (275)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 35.000</div>
+            <button class="btn-add" onclick="openModal({name:'Matcha Latte',price:35000,emoji:'🍵',desc:'Teh hijau Jepang ceremonial grade, creamy, dan sedikit manis.',category:'teh'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="teh" data-name="teh tarik">
+        <div class="card-img">🫖<button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Teh Tarik</div>
+          <div class="card-desc">Teh susu khas melayu yang ditarik hingga berbuih, manis dan gurih.</div>
+          <div class="card-rating"><span class="stars">★★★★☆</span> 4.6 (155)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 18.000</div>
+            <button class="btn-add" onclick="openModal({name:'Teh Tarik',price:18000,emoji:'🫖',desc:'Teh susu khas melayu yang ditarik hingga berbuih, manis dan gurih.',category:'teh'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="teh" data-name="thai tea">
+        <div class="card-img">🧡<button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Thai Tea</div>
+          <div class="card-desc">Teh oranye khas Thailand dengan susu kental manis yang legit.</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.8 (302)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 22.000</div>
+            <button class="btn-add" onclick="openModal({name:'Thai Tea',price:22000,emoji:'🧡',desc:'Teh oranye khas Thailand dengan susu kental manis yang legit.',category:'teh'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="boba" data-name="boba milk tea">
+        <div class="card-img">🧋<span class="card-badge hot">🔥 Viral</span><button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Boba Milk Tea</div>
+          <div class="card-desc">Milk tea creamy dengan boba kenyal yang menggoda, pilihan rasa beragam.</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 5.0 (521)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 32.000</div>
+            <button class="btn-add" onclick="openModal({name:'Boba Milk Tea',price:32000,emoji:'🧋',desc:'Milk tea creamy dengan boba kenyal yang menggoda.',category:'boba'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="boba" data-name="brown sugar boba">
+        <div class="card-img">🤎<span class="card-badge new">Baru</span><button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Brown Sugar Boba</div>
+          <div class="card-desc">Boba dengan sirup gula aren asli, diguyur susu segar yang dingin.</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.9 (198)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 36.000</div>
+            <button class="btn-add" onclick="openModal({name:'Brown Sugar Boba',price:36000,emoji:'🤎',desc:'Boba dengan sirup gula aren asli, diguyur susu segar yang dingin.',category:'boba'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="jus" data-name="jus alpukat">
+        <div class="card-img">🥑<button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Jus Alpukat</div>
+          <div class="card-desc">Alpukat lokal pilihan, creamy natural, manis dari susu kental.</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.8 (210)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 25.000</div>
+            <button class="btn-add" onclick="openModal({name:'Jus Alpukat',price:25000,emoji:'🥑',desc:'Alpukat lokal pilihan, creamy natural, manis dari susu kental.',category:'jus'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="jus" data-name="lemon squash">
+        <div class="card-img">🍋<button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Lemon Squash</div>
+          <div class="card-desc">Perasan lemon segar dicampur air soda dan madu, menyegarkan!</div>
+          <div class="card-rating"><span class="stars">★★★★☆</span> 4.7 (143)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 20.000</div>
+            <button class="btn-add" onclick="openModal({name:'Lemon Squash',price:20000,emoji:'🍋',desc:'Perasan lemon segar dicampur air soda dan madu, menyegarkan!',category:'jus'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="coklat" data-name="dark hot chocolate">
+        <div class="card-img">🍫<button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Dark Hot Chocolate</div>
+          <div class="card-desc">Coklat gelap 70% cacao, kaya rasa, hangat dan memanjakan.</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.9 (178)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 30.000</div>
+            <button class="btn-add" onclick="openModal({name:'Dark Hot Chocolate',price:30000,emoji:'🍫',desc:'Coklat gelap 70% cacao, kaya rasa, hangat dan memanjakan.',category:'coklat'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="milkshake" data-name="strawberry milkshake">
+        <div class="card-img">🍓<button class="card-fav" onclick="toggleFav(this)">🤍</button></div>
+        <div class="card-body">
+          <div class="card-name">Strawberry Milkshake</div>
+          <div class="card-desc">Milkshake stroberi segar dengan es krim vanilla dan whipped cream.</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.8 (165)</div>
+          <div class="card-footer">
+            <div class="card-price">Rp 38.000</div>
+            <button class="btn-add" onclick="openModal({name:'Strawberry Milkshake',price:38000,emoji:'🍓',desc:'Milkshake stroberi segar dengan es krim vanilla dan whipped cream.',category:'milkshake'})">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>🛒 Keranjang</h2>
+      <span class="cart-count-pill" id="cartCountPill">0 item</span>
+    </div>
+    <div class="cart-body">
+      <div class="cart-empty" id="cartEmpty">
+        <div class="empty-icon">🧃</div>
+        <p>Keranjangmu masih kosong.<br>Yuk pilih minuman favoritmu!</p>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="voucher-box" id="voucherBox" style="display:none">
+        <input type="text" id="voucherInput" placeholder="Kode voucher..." />
+        <button class="btn-voucher" onclick="applyVoucher()">Pakai</button>
+      </div>
+      <div class="voucher-msg" id="voucherMsg"></div>
+      <div id="deliveryBox" style="display:none">
+        <div class="modal-option-label" style="margin-bottom:8px">Metode Pengiriman</div>
+        <div class="delivery-opts">
+          <div class="delivery-opt active" onclick="selectDelivery(this,'Ambil Sendiri',0)">
+            <div class="d-icon">🏃</div>Ambil Sendiri<br><small>Gratis</small>
+          </div>
+          <div class="delivery-opt" onclick="selectDelivery(this,'Delivery',8000)">
+            <div class="d-icon">🛵</div>Delivery<br><small>+Rp 8.000</small>
+          </div>
+          <div class="delivery-opt" onclick="selectDelivery(this,'Drive-Thru',0)">
+            <div class="d-icon">🚗</div>Drive-Thru<br><small>Gratis</small>
+          </div>
+        </div>
+      </div>
+      <div class="cart-summary" id="cartSummary" style="display:none">
+        <div class="summary-row"><span>Subtotal</span><span id="subtotalEl">Rp 0</span></div>
+        <div class="summary-row discount" id="discountRow" style="display:none"><span>🎁 Diskon</span><span id="discountEl">-Rp 0</span></div>
+        <div class="summary-row"><span>Ongkos kirim</span><span id="ongkirEl">Rp 0</span></div>
+        <div class="summary-row total"><span>Total</span><span id="totalEl">Rp 0</span></div>
+      </div>
+      <button class="btn-checkout" id="btnCheckout" onclick="proceedCheckout()" disabled>
+        💳 Lanjut Pembayaran
+      </button>
+    </div>
+  </aside>
+
+</div>
+
+<div class="info-section" id="infoSection" style="display:none">
+  <div class="info-card">
+    <h3>👤 Data Pemesan</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nama Lengkap</label>
+        <input type="text" id="custName" placeholder="Nama kamu" />
+      </div>
+      <div class="form-group">
+        <label>No. WhatsApp</label>
+        <input type="tel" id="custPhone" placeholder="08xxxxxxxxxx" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Alamat Pengiriman</label>
+      <input type="text" id="custAddress" placeholder="Masukkan alamat lengkap" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Tanggal Pesanan</label>
+        <input type="date" id="custDate" />
+      </div>
+      <div class="form-group">
+        <label>Waktu Pengambilan</label>
+        <input type="time" id="custTime" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Catatan Pesanan</label>
+      <textarea id="custNote" placeholder="Misal: tanpa gula, es banyak, dll..."></textarea>
+    </div>
+  </div>
+  <div class="info-card">
+    <h3>💳 Metode Pembayaran</h3>
+    <div class="payment-methods">
+      <div class="pay-opt active" onclick="selectPayment(this,'Transfer Bank')"><div class="pay-icon">🏦</div><div class="pay-name">Transfer Bank</div></div>
+      <div class="pay-opt" onclick="selectPayment(this,'GoPay')"><div class="pay-icon">💚</div><div class="pay-name">GoPay</div></div>
+      <div class="pay-opt" onclick="selectPayment(this,'OVO')"><div class="pay-icon">💜</div><div class="pay-name">OVO</div></div>
+      <div class="pay-opt" onclick="selectPayment(this,'DANA')"><div class="pay-icon">💙</div><div class="pay-name">DANA</div></div>
+      <div class="pay-opt" onclick="selectPayment(this,'ShopeePay')"><div class="pay-icon">🧡</div><div class="pay-name">ShopeePay</div></div>
+      <div class="pay-opt" onclick="selectPayment(this,'Tunai')"><div class="pay-icon">💵</div><div class="pay-name">Tunai</div></div>
+    </div>
+    <div style="margin-top:24px">
+      <div class="cart-summary" style="display:flex">
+        <div class="summary-row"><span>Subtotal</span><span id="subtotalEl2">Rp 0</span></div>
+        <div class="summary-row discount" id="discountRow2" style="display:none"><span>🎁 Diskon</span><span id="discountEl2">-Rp 0</span></div>
+        <div class="summary-row"><span>Ongkos kirim</span><span id="ongkirEl2">Rp 0</span></div>
+        <div class="summary-row total"><span>Total Bayar</span><span id="totalEl2">Rp 0</span></div>
+      </div>
+      <button class="btn-checkout" onclick="placeOrder()" style="margin-top:16px">✅ Pesan Sekarang</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Produk -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Detail Produk</h3>
+      <button class="btn-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-emoji" id="modalEmoji">☕</div>
+      <div class="modal-product-name" id="modalName"></div>
+      <div class="modal-product-price" id="modalPrice"></div>
+      <div class="modal-product-desc" id="modalDesc"></div>
+      <div class="modal-option-label">Ukuran</div>
+      <div class="modal-options" id="sizeOpts">
+        <div class="opt-chip active" onclick="selectChip(this,'size')" data-val="Regular" data-add="0">Regular</div>
+        <div class="opt-chip" onclick="selectChip(this,'size')" data-val="Large" data-add="5000">Large +5rb</div>
+        <div class="opt-chip" onclick="selectChip(this,'size')" data-val="XL" data-add="10000">XL +10rb</div>
+      </div>
+      <div class="modal-option-label">Tingkat Gula</div>
+      <div class="modal-options" id="sugarOpts">
+        <div class="opt-chip" onclick="selectChip(this,'sugar')" data-val="Tanpa Gula">0%</div>
+        <div class="opt-chip" onclick="selectChip(this,'sugar')" data-val="25%">25%</div>
+        <div class="opt-chip active" onclick="selectChip(this,'sugar')" data-val="Normal">Normal</div>
+        <div class="opt-chip" onclick="selectChip(this,'sugar')" data-val="Extra Manis">Extra</div>
+      </div>
+      <div class="modal-option-label">Tingkat Es</div>
+      <div class="modal-options" id="iceOpts">
+        <div class="opt-chip" onclick="selectChip(this,'ice')" data-val="Panas">Panas</div>
+        <div class="opt-chip" onclick="selectChip(this,'ice')" data-val="Tanpa Es">Tanpa Es</div>
+        <div class="opt-chip active" onclick="selectChip(this,'ice')" data-val="Normal">Normal</div>
+        <div class="opt-chip" onclick="selectChip(this,'ice')" data-val="Extra Es">Extra Es</div>
+      </div>
+      <div class="modal-qty">
+        <label>Jumlah</label>
+        <div class="qty-control">
+          <button onclick="changeModalQty(-1)">−</button>
+          <span id="modalQty">1</span>
+          <button onclick="changeModalQty(1)">+</button>
+        </div>
+      </div>
+      <div class="modal-note">
+        <div class="modal-option-label">Catatan Khusus</div>
+        <input type="text" id="modalNote" placeholder="Misal: tanpa topping, extra shot, dll..." />
+      </div>
+      <button class="btn-add-to-cart" onclick="addToCartFromModal()">
+        🛒 Tambah ke Keranjang — <span id="modalTotal">Rp 0</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Sukses -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🎉 Pesanan Berhasil!</h3>
+      <button class="btn-close" onclick="closeSuccess()">✕</button>
+    </div>
+    <div class="success-body">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Pesanan Diterima!</div>
+      <div class="success-sub">Terima kasih! Pesananmu sedang kami proses.<br>Estimasi siap: <strong>15–20 menit</strong></div>
+      <div class="success-order-id">No. Pesanan<br><strong id="orderIdEl">#BRW-00000</strong></div>
+      <div class="success-sub" id="successSummary" style="font-size:13px;color:#5C3317;"></div>
+      <button class="btn-primary" onclick="closeSuccess()" style="margin:16px auto 0;display:flex">🏠 Kembali ke Menu</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<footer>© 2025 <span>Brewly</span> — Setiap Tegukan Punya Ceritanya ☕</footer>
+
+<script>
+let cart = [];
+let selectedPayment = 'Transfer Bank';
+let deliveryCost = 0;
+let discountAmt = 0;
+let discountApplied = false;
+
+const VOUCHERS = {
+  'BREWLY10': { type: 'percent', val: 10, label: 'Diskon 10%' },
+  'GRATIS':   { type: 'flat',    val: 15000, label: 'Diskon Rp 15.000' },
+};
+
+let modalData = {};
+let modalQty = 1;
+let sizeAdd  = 0;
+let selectedSize  = 'Regular';
+let selectedSugar = 'Normal';
+let selectedIce   = 'Normal';
+
+const fmt = n => 'Rp ' + n.toLocaleString('id-ID');
+
+function showToast(msg, type = '') {
+  const tc = document.getElementById('toastContainer');
+  const t  = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = (type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️') + ' ' + msg;
+  tc.appendChild(t);
+  setTimeout(() => {
+    t.style.animation = 'toastOut 0.3s ease forwards';
+    setTimeout(() => t.remove(), 300);
+  }, 2800);
+}
+
+function filterCategory(cat, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.classList.toggle('hidden', cat !== 'semua' && card.dataset.category !== cat);
+  });
+}
+
+function filterSearch(val) {
+  const q = val.toLowerCase().trim();
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.classList.toggle('hidden', q && !card.dataset.name.includes(q));
+  });
+}
+
+function toggleFav(btn) {
+  const isActive = btn.classList.toggle('active');
+  btn.textContent = isActive ? '❤️' : '🤍';
+  showToast(isActive ? 'Ditambahkan ke favorit!' : 'Dihapus dari favorit', isActive ? 'success' : '');
+}
+
+function openModal(data) {
+  modalData = data; modalQty = 1; sizeAdd = 0;
+  selectedSize = 'Regular'; selectedSugar = 'Normal'; selectedIce = 'Normal';
+  document.getElementById('modalTitle').textContent = data.name;
+  document.getElementById('modalEmoji').textContent = data.emoji;
+  document.getElementById('modalName').textContent  = data.name;
+  document.getElementById('modalPrice').textContent = fmt(data.price);
+  document.getElementById('modalDesc').textContent  = data.desc;
+  document.getElementById('modalQty').textContent   = 1;
+  document.getElementById('modalNote').value        = '';
+  document.querySelectorAll('#sizeOpts .opt-chip').forEach((c,i)  => c.classList.toggle('active', i===0));
+  document.querySelectorAll('#sugarOpts .opt-chip').forEach((c,i) => c.classList.toggle('active', i===2));
+  document.querySelectorAll('#iceOpts .opt-chip').forEach((c,i)   => c.classList.toggle('active', i===2));
+  updateModalTotal();
+  document.getElementById('productModal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('productModal').classList.remove('open'); }
+
+function selectChip(el, group) {
+  el.closest('.modal-options').querySelectorAll('.opt-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  if (group === 'size')  { selectedSize  = el.dataset.val; sizeAdd = parseInt(el.dataset.add || 0); }
+  if (group === 'sugar') { selectedSugar = el.dataset.val; }
+  if (group === 'ice')   { selectedIce   = el.dataset.val; }
+  updateModalTotal();
+}
+
+function changeModalQty(d) {
+  modalQty = Math.max(1, modalQty + d);
+  document.getElementById('modalQty').textContent = modalQty;
+  updateModalTotal();
+}
+
+function updateModalTotal() {
+  document.getElementById('modalTotal').textContent = fmt((modalData.price + sizeAdd) * modalQty);
+}
+
+function addToCartFromModal() {
+  const note = document.getElementById('modalNote').value;
+  const label = [selectedSize, selectedSugar + ' gula', selectedIce + ' es'].join(' · ');
+  const itemPrice = modalData.price + sizeAdd;
+  const existing = cart.find(c => c.name === modalData.name && c.size === selectedSize && c.sugar === selectedSugar && c.ice === selectedIce && c.note === note);
+  if (existing) { existing.qty += modalQty; }
+  else { cart.push({ id: Date.now(), name: modalData.name, emoji: modalData.emoji, price: itemPrice, qty: modalQty, size: selectedSize, sugar: selectedSugar, ice: selectedIce, note, label }); }
+  closeModal(); renderCart();
+  showToast(modalData.name + ' ditambahkan ke keranjang! 🛒', 'success');
+}
+
+function renderCart() {
+  const empty = document.getElementById('cartEmpty');
+  const itemsEl = document.getElementById('cartItems');
+  const summaryEl = document.getElementById('cartSummary');
+  const voucherBox = document.getElementById('voucherBox');
+  const deliveryBox = document.getElementById('deliveryBox');
+  const btnCO = document.getElementById('btnCheckout');
+  const totalQty = cart.reduce((s,c) => s+c.qty, 0);
+  document.getElementById('cartBadge').textContent = totalQty;
+  document.getElementById('cartCountPill').textContent = totalQty + ' item';
+  if (cart.length === 0) {
+    empty.style.display = ''; itemsEl.innerHTML = '';
+    summaryEl.style.display = 'none'; voucherBox.style.display = 'none';
+    deliveryBox.style.display = 'none'; btnCO.disabled = true;
+    document.getElementById('infoSection').style.display = 'none'; return;
+  }
+  empty.style.display = 'none'; summaryEl.style.display = 'flex';
+  voucherBox.style.display = 'flex'; deliveryBox.style.display = ''; btnCO.disabled = false;
+  itemsEl.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="ci-emoji">${item.emoji}</div>
+      <div class="ci-info"><div class="ci-name">${item.name}</div><div class="ci-note">${item.label}${item.note?' · '+item.note:''}</div></div>
+      <div class="ci-price">${fmt(item.price*item.qty)}</div>
+      <div class="ci-qty">
+        <button onclick="changeQty(${item.id},-1)">−</button>
+        <span>${item.qty}</span>
+        <button class="remove" onclick="removeItem(${item.id})">🗑</button>
+      </div>
+    </div>`).join('');
+  updateSummary();
+}
+
+function changeQty(id, d) {
+  const item = cart.find(c => c.id === id);
+  if (item) { item.qty = Math.max(1, item.qty + d); renderCart(); }
+}
+
+function removeItem(id) {
+  cart = cart.filter(c => c.id !== id); renderCart();
+  showToast('Item dihapus dari keranjang', 'error');
+}
+
+function updateSummary() {
+  const subtotal = cart.reduce((s,c) => s+c.price*c.qty, 0);
+  const discount = discountApplied ? discountAmt : 0;
+  const total = Math.max(0, subtotal - discount + deliveryCost);
+  const s = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = fmt(v); };
+  s('subtotalEl',subtotal); s('subtotalEl2',subtotal);
+  s('ongkirEl',deliveryCost); s('ongkirEl2',deliveryCost);
+  s('totalEl',total); s('totalEl2',total);
+  const show = discount > 0;
+  if(show){ s('discountEl',discount); s('discountEl2',discount); }
+  ['discountRow','discountRow2'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display=show?'flex':'none'; });
+}
+
+function selectDelivery(el, name, cost) {
+  document.querySelectorAll('.delivery-opt').forEach(d => d.classList.remove('active'));
+  el.classList.add('active'); deliveryCost = cost; updateSummary();
+}
+
+function applyVoucher() {
+  const code = document.getElementById('voucherInput').value.toUpperCase().trim();
+  const msgEl = document.getElementById('voucherMsg');
+  const v = VOUCHERS[code];
+  if (!v) { msgEl.textContent='❌ Kode voucher tidak valid.'; msgEl.className='voucher-msg error'; discountApplied=false; discountAmt=0; updateSummary(); return; }
+  const subtotal = cart.reduce((s,c) => s+c.price*c.qty, 0);
+  discountAmt = v.type==='percent' ? Math.round(subtotal*v.val/100) : v.val;
+  discountApplied = true;
+  msgEl.textContent = '✅ '+v.label+' berhasil!'; msgEl.className='voucher-msg success';
+  updateSummary(); showToast('Voucher berhasil! '+v.label,'success');
+}
+
+function selectPayment(el, method) {
+  document.querySelectorAll('.pay-opt').forEach(p => p.classList.remove('active'));
+  el.classList.add('active'); selectedPayment = method;
+}
+
+function proceedCheckout() {
+  const info = document.getElementById('infoSection');
+  info.style.display = 'grid'; info.scrollIntoView({behavior:'smooth'});
+  const today = new Date();
+  document.getElementById('custDate').value = today.toISOString().split('T')[0];
+  document.getElementById('custTime').value = String(today.getHours()).padStart(2,'0')+':'+String(today.getMinutes()).padStart(2,'0');
+}
+
+function placeOrder() {
+  const name  = document.getElementById('custName').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+  if (!name || !phone) { showToast('Harap isi nama dan nomor WhatsApp!','error'); return; }
+  if (cart.length === 0) { showToast('Keranjang masih kosong!','error'); return; }
+  const orderId = '#BRW-' + Math.floor(10000+Math.random()*90000);
+  const subtotal = cart.reduce((s,c) => s+c.price*c.qty, 0);
+  const total = Math.max(0, subtotal - (discountApplied?discountAmt:0) + deliveryCost);
+  document.getElementById('orderIdEl').textContent = orderId;
+  document.getElementById('successSummary').innerHTML = `<strong>${name}</strong> · ${selectedPayment}<br>Total: <strong>${fmt(total)}</strong>`;
+  document.getElementById('successModal').classList.add('open');
+}
+
+function closeSuccess() {
+  document.getElementById('successModal').classList.remove('open');
+  cart=[]; discountApplied=false; discountAmt=0; deliveryCost=0;
+  document.getElementById('voucherInput').value='';
+  document.getElementById('voucherMsg').className='voucher-msg';
+  document.getElementById('infoSection').style.display='none';
+  renderCart(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function openPromo() { showToast('🎁 Kode BREWLY10 = diskon 10%  |  GRATIS = diskon Rp 15.000',''); }
+function scrollToCart() { document.getElementById('cartSidebar').scrollIntoView({behavior:'smooth'}); }
+
+renderCart();
+document.getElementById('productModal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+document.getElementById('successModal').addEventListener('click', function(e){ if(e.target===this) closeSuccess(); });
+</script>
+
+</body>
+</html>
